@@ -2132,6 +2132,16 @@ create table category
 (
     id         int primary key auto_increment      not null,
     name       varchar(350)                        not null,
+    asset      varchar(350)                        not null,
+    created_at timestamp default current_timestamp not null,
+    updated_at timestamp default current_timestamp not null
+);
+
+create table sub_category
+(
+    id         int primary key auto_increment      not null,
+    idCategory int                                 not null,
+    name       varchar(350)                        not null,
     created_at timestamp default current_timestamp not null,
     updated_at timestamp default current_timestamp not null
 );
@@ -2162,6 +2172,7 @@ create table subasta
 (
     id             int primary key auto_increment       not null,
     idCategory     int                                  not null,
+    idSubCategory  int                                  not null,
     idTypeSubasta  int                                  not null,
     idHoraSubasta  int                                  not null,
     idStateSubasta int                                  not null,
@@ -2261,14 +2272,15 @@ insert into gender (name) value ('hombre'),('mujer');
 create table users
 (
     id         int primary key auto_increment           not null,
-    idRole     int                                      not null,
-    idGender   int                                      not null,
-    idDistrite varchar(6)                               not null,
+    dni        varchar(350)                             not null,
+    idRole     int            default 1                 not null,
+    idGender   int            default 1                 not null,
+    idDistrite varchar(6)     default '150101'          not null,
     name       varchar(350)                             not null,
     email      varchar(350)                             not null,
     date_birth date           default current_date      not null,
-    phone      varchar(350)                             not null,
-    address    varchar(350)                             not null,
+    phone      varchar(350)   default ''                not null,
+    address    varchar(350)   default ''                not null,
     password   varchar(350)                             not null,
     coins      decimal(10, 2) default 0.00              not null,
     created_at timestamp      default current_timestamp not null,
@@ -2329,12 +2341,16 @@ create table pay
 
 alter table subasta
 add constraint idCategory_categoryS foreign key (idCategory) references category (id) on update restrict on delete restrict,
+    add constraint idSubCategory_subCategoryS foreign key (idSubCategory) references sub_category (id) on update restrict on delete restrict,
     add constraint idTypeSubasta_TypeSubasta foreign key (idTypeSubasta) references type_subasta (id) on update restrict on delete restrict,
     add constraint idHoraSubasta_HoraSubasta foreign key (idHoraSubasta) references hora_subasta (id) on update restrict on delete restrict,
     add constraint idStateSubasta_StateSubasta foreign key (idStateSubasta) references state_subasta (id) on update restrict on delete restrict;
 
 alter table media_subasta
 add constraint idSubasta_subastaMS foreign key (idSubasta) references subasta (id) on update restrict on delete restrict;
+
+alter table sub_category
+add constraint idCategory_category foreign key (idCategory) references category (id) on update restrict on delete restrict;
 
 alter table location_subasta
 add constraint idSubasta_subastaLS foreign key (idSubasta) references subasta (id) on update restrict on delete restrict,
@@ -2572,17 +2588,19 @@ values ('negociable'),
     ('subasta'),
     ('venta');
 
-insert into category (name)
-values ('Vehículos'),
-    ('Propiedades'),
-    ('Tecnología'),
-    ('Mobiliaria'),
-    ('Repuestos'),
-    ('Chatarra'),
-    ('Maquinaria'),
-    ('Electrónica'),
-    ('Empresa'),
-    ('Ubicaciones');
+insert into category (name, asset)
+values ('Vehículos', 'vehiculos'),
+    ('Propiedades', 'propiedades'),
+    ('Tecnología', 'tecnologia'),
+    ('Mobiliaria', 'mobiliaria'),
+    ('Repuestos', 'repuestos'),
+    ('Chatarra', 'chatarra'),
+    ('Maquinaria', 'maquinaria'),
+    ('Electrónica', 'electronica'),
+    ('Empresa', 'empresa'),
+    ('Ubicaciones', 'ubicaciones');
+
+insert into sub_category(idCategory, name) value (1, 'prueba');
 
 insert into type_pay (name)
 values ('YAPE'),
@@ -2591,7 +2609,7 @@ values ('YAPE'),
 
 ######################
 
-insert into users (idRole, idGender, idDistrite, name, email, phone, address, password)
-    value (1, 1, '010101', 'rodo', 'rodo', '123456789', 'rodo', 'rodo');
+insert into users (idRole,dni, idGender, idDistrite, name, email, phone, address, password)
+    value (1,'123', 1, '010101', 'rodo', 'rodo', '123456789', 'rodo', 'rodo');
 
 
