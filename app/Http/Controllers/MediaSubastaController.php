@@ -8,40 +8,53 @@ use Illuminate\Http\Request;
 
 class MediaSubastaController extends Controller {
     public function create(Request $request) {
-        $json = $request->input('json', null);
-        $params = json_decode($json);
-        $idSubasta = (!is_null($json) && isset($params->idSubasta)) ? $params->idSubasta : null;
-        $imageUrl1 = (!is_null($json) && isset($params->imageUrl1)) ? $params->imageUrl1 : null;
-        $imageUrl2 = (!is_null($json) && isset($params->imageUrl2)) ? $params->imageUrl2 : null;
-        $imageUrl3 = (!is_null($json) && isset($params->imageUrl3)) ? $params->imageUrl3 : null;
-        $imageUrl4 = (!is_null($json) && isset($params->imageUrl4)) ? $params->imageUrl4 : null;
-        $imageUrl5 = (!is_null($json) && isset($params->imageUrl5)) ? $params->imageUrl5 : null;
-        $imageUrl6 = (!is_null($json) && isset($params->imageUrl6)) ? $params->imageUrl6 : null;
-        $imageUrl7 = (!is_null($json) && isset($params->imageUrl7)) ? $params->imageUrl7 : null;
-        $imageUrl8 = (!is_null($json) && isset($params->imageUrl8)) ? $params->imageUrl8 : null;
-        $imageUrl9 = (!is_null($json) && isset($params->imageUrl9)) ? $params->imageUrl9 : null;
-        $imageUrl10 = (!is_null($json) && isset($params->imageUrl10)) ? $params->imageUrl10 : null;
-        $videoUlr = (!is_null($json) && isset($params->videoUrl)) ? $params->videoUrl : null;
+        //$json = $request->input('json', null);
+        //$params = json_decode($json);
+        //$idSubasta = (!is_null($json) && isset($params->idSubasta)) ? $params->idSubasta : null;
+        $idSubasta   = $request->post('idSubasta');
+        //$videoUlr = (!is_null($json) && isset($params->videoUrl)) ? $params->videoUrl : null;
+        $videoUrl   = $request->post('videoUrl');
+        //$imageUrl1 = $request->file('image1')->getClientOriginalName();
+        $image1 = base64_decode($request->post('image1'));
+        $path1 = $request->file('image1')->store('public/images');
+        //$imageUrl2 = $request->file('image2')->getClientOriginalName();
+        $path2 = $request->file('image2')->store('public/images');
+        //$imageUrl3 = $request->file('image3')->getClientOriginalName();
+        $path3 = $request->file('image3')->store('public/images');
+        //$imageUrl4 = $request->file('image4')->getClientOriginalName();
+        $path4 = $request->file('image4')->store('public/images');
+        //$imageUrl5 = $request->file('image5')->getClientOriginalName();
+        $path5 = $request->file('image5')->store('public/images');
+        //$imageUrl6 = $request->file('image6')->getClientOriginalName();
+        $path6 = $request->file('image6')->store('public/images');
+        //$imageUrl7 = $request->file('image7')->getClientOriginalName();
+        $path7 = $request->file('image7')->store('public/images');
+        //$imageUrl8 = $request->file('image8')->getClientOriginalName();
+        $path8 = $request->file('image8')->store('public/images');
+        //$imageUrl9 = $request->file('image9')->getClientOriginalName();
+        $path9 = $request->file('image9')->store('public/images');
+        //$imageUrl10 = $request->file('image10')->getClientOriginalName();
+        $path10 = $request->file('image10')->store('public/images');
         $token = $request->header('Authorization', null);
         $jwtAuth = new JwtAuth();
         $checkToken = $jwtAuth->checkToken($token);
         if (is_null($checkToken)) {
-            if (!is_null($idSubasta) && !is_null($imageUrl1) && !is_null($imageUrl2) && !is_null($imageUrl3) &&
-                !is_null($imageUrl4) && !is_null($imageUrl5) && !is_null($imageUrl6) && !is_null($imageUrl7) &&
-                !is_null($imageUrl8) && !is_null($imageUrl9) && !is_null($imageUrl10) && !is_null($videoUlr)) {
+            if (!is_null($path1) && !is_null($path2) && !is_null($path3) && !is_null($path4) &&
+                !is_null($path5) && !is_null($path6) && !is_null($path7) && !is_null($path8) &&
+                !is_null($path9) && !is_null($path10) && !is_null($idSubasta) && !is_null($videoUrl)) {
                 $mediaSubasta = new MediaSubasta();
                 $mediaSubasta->idSubasta = $idSubasta;
-                $mediaSubasta->imageUrl1 = $imageUrl1;
-                $mediaSubasta->imageUrl2 = $imageUrl2;
-                $mediaSubasta->imageUrl3 = $imageUrl3;
-                $mediaSubasta->imageUrl4 = $imageUrl4;
-                $mediaSubasta->imageUrl5 = $imageUrl5;
-                $mediaSubasta->imageUrl6 = $imageUrl6;
-                $mediaSubasta->imageUrl7 = $imageUrl7;
-                $mediaSubasta->imageUrl8 = $imageUrl8;
-                $mediaSubasta->imageUrl9 = $imageUrl9;
-                $mediaSubasta->imageUrl10 = $imageUrl10;
-                $mediaSubasta->videoUlr = $videoUlr;
+                $mediaSubasta->imageUrl1 = $path1;
+                $mediaSubasta->imageUrl2 = $path2;
+                $mediaSubasta->imageUrl3 = $path3;
+                $mediaSubasta->imageUrl4 = $path4;
+                $mediaSubasta->imageUrl5 = $path5;
+                $mediaSubasta->imageUrl6 = $path6;
+                $mediaSubasta->imageUrl7 = $path7;
+                $mediaSubasta->imageUrl8 = $path8;
+                $mediaSubasta->imageUrl9 = $path9;
+                $mediaSubasta->imageUrl10 = $path10;
+                $mediaSubasta->videoUrl = $videoUrl;
                 $mediaSubasta->save();
                 return response()->json(array('mediaSubasta' => $mediaSubasta, 'status' => 'success', 'message' => 'Media subasta creada', 'code' => 200), 200);
             } else {

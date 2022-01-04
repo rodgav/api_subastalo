@@ -23,14 +23,13 @@ class SubastaController extends Controller {
         $mileage = (!is_null($json) && isset($params->mileage)) ? $params->mileage : null;
         $fuel = (!is_null($json) && isset($params->fuel)) ? $params->fuel : null;
         $details = (!is_null($json) && isset($params->details)) ? $params->details : null;
-        $salient = (!is_null($json) && isset($params->salient)) ? $params->salient : null;
         $token = $request->header('Authorization', null);
         $jwtAuth = new JwtAuth();
         $checkToken = $jwtAuth->checkToken($token);
         if (is_null($checkToken)) {
             if (!is_null($idCategory) && !is_null($idTypeSubasta) && !is_null($idHoraSubasta) && !is_null($idStateSubasta)
                 && !is_null($title) && !is_null($price) && !is_null($date) && !is_null($brand) && !is_null($model) &&
-                !is_null($year) && !is_null($mileage) && !is_null($fuel) && !is_null($details) && !is_null($salient)) {
+                !is_null($year) && !is_null($mileage) && !is_null($fuel) && !is_null($details)) {
                 $subasta = new Subasta();
                 $subasta->idCategory = $idCategory;
                 $subasta->idTypeSubasta = $idTypeSubasta;
@@ -45,7 +44,6 @@ class SubastaController extends Controller {
                 $subasta->mileage = $mileage;
                 $subasta->fuel = $fuel;
                 $subasta->details = $details;
-                $subasta->salient = $salient;
                 $subasta->save();
                 return response()->json(array('subasta' => $subasta, 'status' => 'success', 'message' => 'Subasta creada', 'code' => 200), 200);
             } else {
