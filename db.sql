@@ -2170,28 +2170,33 @@ create table state_subasta
 
 create table subasta
 (
-    id             int primary key auto_increment       not null,
-    idCategory     int                                  not null,
-    idSubCategory  int                                  not null,
-    idTypeSubasta  int                                  not null,
-    idHoraSubasta  int                                  not null,
-    idStateSubasta int                                  not null,
-    title          varchar(350)                         not null,
-    price          decimal(10, 2)                       not null,
-    date           date       default current_date      not null,
-    brand          varchar(350)                         not null,
-    model          varchar(350)                         not null,
-    year           varchar(350)                         not null,
-    mileage        int                                  not null,
-    fuel           varchar(350)                         not null,
-    details        text                                 not null,
-    salient        tinyint(1) default 0                 not null,
-    created_at     timestamp  default current_timestamp not null,
-    updated_at     timestamp  default current_timestamp not null
+    id             int primary key auto_increment      not null,
+    idUser         int                                 not null,
+    idCategory     int                                 not null,
+    idSubCategory  int       default 1                 not null,
+    idTypeSubasta  int                                 not null,
+    idHoraSubasta  int                                 not null,
+    idStateSubasta int                                 not null,
+    title          varchar(350)                        not null,
+    price          decimal(10, 2)                      not null,
+    date           date      default current_date      not null,
+    brand          varchar(350)                        not null,
+    model          varchar(350)                        not null,
+    year           varchar(350)                        not null,
+    mileage        int                                 not null,
+    fuel           varchar(350)                        not null,
+    details        text                                not null,
+    viewsReal      int       default 0                 not null,
+    views          int       default 0                 not null,
+    love           int       default 0                 not null,
+    created_at     timestamp default current_timestamp not null,
+
+    updated_at     timestamp default current_timestamp not null
 );
 
 create table media_subasta
 (
+    id         int primary key auto_increment      not null,
     idSubasta  int                                 not null,
     imageUrl1  varchar(350)                        not null,
     imageUrl2  varchar(350)                        not null,
@@ -2225,7 +2230,6 @@ create table vendedor_subasta
     companyVendedor varchar(350)                        not null,
     emailVendedor   varchar(350)                        not null,
     address         varchar(350)                        not null,
-    date            timestamp default current_timestamp not null,
     created_at      timestamp default current_timestamp not null,
     updated_at      timestamp default current_timestamp not null
 );
@@ -2600,7 +2604,7 @@ values ('Vehículos', 'vehiculos'),
     ('Empresa', 'empresa'),
     ('Ubicaciones', 'ubicaciones');
 
-insert into sub_category(idCategory, name) value (1, 'prueba');
+insert into sub_category(id, idCategory, name) value (1, 1, 'ninguna');
 
 insert into type_pay (name)
 values ('YAPE'),
@@ -2609,7 +2613,7 @@ values ('YAPE'),
 
 ######################
 
-insert into users (idRole,dni, idGender, idDistrite, name, email, phone, address, password)
-    value (1,'123', 1, '010101', 'rodo', 'rodo', '123456789', 'rodo', 'rodo');
+insert into users (idRole, dni, idGender, idDistrite, name, email, phone, address, password)
+    value (1, '123', 1, '010101', 'prueba1', 'prueba1@gmail.com', '123456789', 'rodo', '123456789');
 
 

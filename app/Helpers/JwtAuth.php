@@ -38,7 +38,7 @@ class JwtAuth {
         }
     }
 
-    public function checkToken($jwt) {
+    public function checkToken($jwt): ?array {
         try {
             $decode = JWT::decode($jwt, $this->key, array('HS256'));
             if (is_object($decode) && isset($decode->id)) {
@@ -84,6 +84,13 @@ class JwtAuth {
             }
         } catch (\UnexpectedValueException|\DomainException $e) {
             return array('status' => 'error', 'message' => 'Token invalido', 'code' => 401, 'jwt' => null);
+        }
+    }
+    public function decode($jwt): ?object {
+        try{
+            return JWT::decode($jwt, $this->key, array('HS256'));
+        }catch (\Exception $e){
+            return null;
         }
     }
 }
