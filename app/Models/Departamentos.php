@@ -9,4 +9,6 @@ class Departamentos extends Model
 {
     use HasFactory;
     protected $table = 'departamentos';
+    protected $primaryKey = 'id';
+    protected $keyType = 'string';
 }

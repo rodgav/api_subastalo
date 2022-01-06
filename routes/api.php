@@ -49,6 +49,7 @@ Route::get('statesSubasta', [\App\Http\Controllers\StateSubastaController::class
 Route::post('subasta', [\App\Http\Controllers\SubastaController::class, 'create']);
 Route::get('subasta', [\App\Http\Controllers\SubastaController::class, 'read']);
 Route::get('misubasta', [\App\Http\Controllers\SubastaController::class, 'readForUser']);
+Route::get('miSubastaId', [\App\Http\Controllers\SubastaController::class, 'readForId']);
 Route::put('subasta/{id}', [\App\Http\Controllers\SubastaController::class, 'updateState']);
 Route::get('typePay', [\App\Http\Controllers\TypePayController::class, 'read']);
 Route::get('typeSubasta', [\App\Http\Controllers\TypeSubastaController::class, 'read']);

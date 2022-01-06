@@ -11,9 +11,9 @@ class SubastaController extends Controller {
         $json = $request->input('json', null);
         $params = json_decode($json);
         $idCategory = (!is_null($json) && isset($params->idCategory)) ? $params->idCategory : null;
-        $idTypeSubasta = (!is_null($json) && isset($params->idTypeSubasta)) ? $params->idTypeSubasta : null;
+        $idSubCategory = (!is_null($json) && isset($params->idSubCategory)) ? $params->idSubCategory : null;
         $idHoraSubasta = (!is_null($json) && isset($params->idHoraSubasta)) ? $params->idHoraSubasta : null;
-        $idStateSubasta = (!is_null($json) && isset($params->idStateSubasta)) ? $params->idStateSubasta : null;
+        $idTypeSubasta = (!is_null($json) && isset($params->idTypeSubasta)) ? $params->idTypeSubasta : null;
         $title = (!is_null($json) && isset($params->title)) ? $params->title : null;
         $price = (!is_null($json) && isset($params->price)) ? $params->price : null;
         $date = (!is_null($json) && isset($params->date)) ? $params->date : null;
@@ -29,12 +29,18 @@ class SubastaController extends Controller {
         if (is_null($checkToken)) {
             $decode = $jwtAuth->decode($token);
             if (!is_null($decode)) {
-                if (!is_null($idCategory) && !is_null($idTypeSubasta) && !is_null($idHoraSubasta) && !is_null($idStateSubasta)
-                    && !is_null($title) && !is_null($price) && !is_null($date) && !is_null($brand) && !is_null($model) &&
-                    !is_null($year) && !is_null($mileage) && !is_null($fuel) && !is_null($details)) {
+                if ($decode->role == 2) {
+                    $idStateSubasta = 2;
+                } else {
+                    $idStateSubasta = 1;
+                }
+                if (!is_null($idCategory) && !is_null($idSubCategory) && !is_null($idTypeSubasta) && !is_null($idHoraSubasta)
+                    && !is_null($title) && !is_null($price) && !is_null($date) && !is_null($brand)
+                    && !is_null($model) && !is_null($year) && !is_null($mileage) && !is_null($fuel) && !is_null($details)) {
                     $subasta = new Subasta();
                     $subasta->idUser = $decode->id;
                     $subasta->idCategory = $idCategory;
+                    $subasta->idSubCategory = $idSubCategory;
                     $subasta->idTypeSubasta = $idTypeSubasta;
                     $subasta->idHoraSubasta = $idHoraSubasta;
                     $subasta->idStateSubasta = $idStateSubasta;
@@ -61,7 +67,7 @@ class SubastaController extends Controller {
         }
     }
 
-    public function read(Request $request) {
+    public function read(Request $request): \Illuminate\Http\JsonResponse {
         $token = $request->header('Authorization', null);
         $jwtAuth = new JwtAuth();
         $checkToken = $jwtAuth->checkToken($token);
@@ -89,6 +95,21 @@ class SubastaController extends Controller {
             } else {
                 return response()->json(array('subasta' => null, 'status' => 'success', 'message' => 'Decode error', 'code' => 200), 200);
             }
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
+    public function readForId(Request $request) {
+        $token = $request->header('Authorization', null);
+        $idSubasta = $request->query('idSubasta');;
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            $subasta = Subasta::query()->where('id', '=', $idSubasta)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            return response()->json(array('subasta' => $subasta, 'status' => 'success', 'message' => 'Subasta encontrados', 'code' => 200), 200);
         } else {
             return response()->json($checkToken, 200);
         }

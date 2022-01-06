@@ -9,7 +9,8 @@ class Distritos extends Model {
     use HasFactory;
 
     protected $table = 'distritos';
-
+    protected $primaryKey = 'id';
+    protected $keyType = 'string';
     public function provincia() {
         return $this->belongsTo('App\Models\Departamentos', 'id_departmento');
     }

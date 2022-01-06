@@ -31,29 +31,29 @@ class MediaSubastaController extends Controller {
             if (!is_null($image1) && !is_null($image2) && !is_null($image3) && !is_null($image4) &&
                 !is_null($image5) && !is_null($image6) && !is_null($image7) && !is_null($image8) &&
                 !is_null($image9) && !is_null($image10) && !is_null($idSubasta) && !is_null($videoUrl)) {
-                file_put_contents(public_path() . '/uploads/image1-' . $idSubasta . '.png', base64_decode($image1));
-                file_put_contents(public_path() . '/uploads/image2-' . $idSubasta . '.png', base64_decode($image2));
-                file_put_contents(public_path() . '/uploads/image3-' . $idSubasta . '.png', base64_decode($image3));
-                file_put_contents(public_path() . '/uploads/image4-' . $idSubasta . '.png', base64_decode($image4));
-                file_put_contents(public_path() . '/uploads/image5-' . $idSubasta . '.png', base64_decode($image5));
-                file_put_contents(public_path() . '/uploads/image6-' . $idSubasta . '.png', base64_decode($image6));
-                file_put_contents(public_path() . '/uploads/image7-' . $idSubasta . '.png', base64_decode($image7));
-                file_put_contents(public_path() . '/uploads/image8-' . $idSubasta . '.png', base64_decode($image8));
-                file_put_contents(public_path() . '/uploads/image9-' . $idSubasta . '.png', base64_decode($image9));
-                file_put_contents(public_path() . '/uploads/image10-' . $idSubasta . '.png', base64_decode($image10));
+                file_put_contents(public_path() . '/uploads/image0-' . $idSubasta . '.png', base64_decode($image1));
+                file_put_contents(public_path() . '/uploads/image1-' . $idSubasta . '.png', base64_decode($image2));
+                file_put_contents(public_path() . '/uploads/image2-' . $idSubasta . '.png', base64_decode($image3));
+                file_put_contents(public_path() . '/uploads/image3-' . $idSubasta . '.png', base64_decode($image4));
+                file_put_contents(public_path() . '/uploads/image4-' . $idSubasta . '.png', base64_decode($image5));
+                file_put_contents(public_path() . '/uploads/image5-' . $idSubasta . '.png', base64_decode($image6));
+                file_put_contents(public_path() . '/uploads/image6-' . $idSubasta . '.png', base64_decode($image7));
+                file_put_contents(public_path() . '/uploads/image7-' . $idSubasta . '.png', base64_decode($image8));
+                file_put_contents(public_path() . '/uploads/image8-' . $idSubasta . '.png', base64_decode($image9));
+                file_put_contents(public_path() . '/uploads/image9-' . $idSubasta . '.png', base64_decode($image10));
 
                 $mediaSubasta = new MediaSubasta();
                 $mediaSubasta->idSubasta = $idSubasta;
-                $mediaSubasta->imageUrl1 = 'image1-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl2 = 'image2-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl3 = 'image3-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl4 = 'image4-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl5 = 'image5-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl6 = 'image6-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl7 = 'image7-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl8 = 'image8-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl9 = 'image9-' . $idSubasta . '.png';
-                $mediaSubasta->imageUrl10 = 'image10-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl1 = 'image0-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl2 = 'image1-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl3 = 'image2-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl4 = 'image3-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl5 = 'image4-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl6 = 'image5-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl7 = 'image6-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl8 = 'image7-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl9 = 'image8-' . $idSubasta . '.png';
+                $mediaSubasta->imageUrl10 = 'image9-' . $idSubasta . '.png';
                 $mediaSubasta->videoUrl = $videoUrl;
                 $mediaSubasta->save();
                 return response()->json(array('mediaSubasta' => $mediaSubasta, 'status' => 'success', 'message' => 'Media subasta creada', 'code' => 200), 200);

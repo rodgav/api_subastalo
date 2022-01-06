@@ -2178,7 +2178,7 @@ create table subasta
     idHoraSubasta  int                                 not null,
     idStateSubasta int                                 not null,
     title          varchar(350)                        not null,
-    price          decimal(10, 2)                      not null,
+    price          decimal(20, 2)                      not null,
     date           date      default current_date      not null,
     brand          varchar(350)                        not null,
     model          varchar(350)                        not null,
@@ -2286,7 +2286,7 @@ create table users
     phone      varchar(350)   default ''                not null,
     address    varchar(350)   default ''                not null,
     password   varchar(350)                             not null,
-    coins      decimal(10, 2) default 0.00              not null,
+    coins      decimal(20, 2) default 0.00              not null,
     created_at timestamp      default current_timestamp not null,
     updated_at timestamp      default current_timestamp not null
 );
