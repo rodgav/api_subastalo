@@ -24,7 +24,10 @@ Route::delete('logout', [\App\Http\Controllers\UserController::class, 'logOut'])
 
 Route::post('campaign', [\App\Http\Controllers\CampaignController::class, 'create']);
 Route::get('campaign', [\App\Http\Controllers\CampaignController::class, 'read']);
+Route::post('category', [\App\Http\Controllers\CategoryController::class, 'create']);
 Route::get('category', [\App\Http\Controllers\CategoryController::class, 'read']);
+Route::post('subCategory', [\App\Http\Controllers\SubCategoryController::class, 'create']);
+Route::get('subCategory', [\App\Http\Controllers\SubCategoryController::class, 'read']);
 Route::post('comment', [\App\Http\Controllers\CommentController::class, 'create']);
 Route::get('comment', [\App\Http\Controllers\CommentController::class, 'read']);
 Route::get('departamentos', [\App\Http\Controllers\DepartamentosController::class, 'read']);

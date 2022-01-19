@@ -23,4 +23,25 @@ class CategoryController extends Controller {
             return response()->json($checkToken, 200);
         }*/
     }
+
+    public function create(Request $request) {
+        $json = $request->input('json', null);
+        $params = json_decode($json);
+        $name = (!is_null($json) && isset($params->name)) ? $params->name : null;
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            if (!is_null($name)) {
+                $category = new Category();
+                $category->name = $name;
+                $category->save();
+                return response()->json(array('category' => $category, 'status' => 'success', 'message' => 'Categoria creada', 'code' => 200), 200);
+            } else {
+                return response()->json(array('category' => null, 'status' => 'error', 'code' => 400, 'message' => 'Faltan datos'), 200);
+            }
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
 }
