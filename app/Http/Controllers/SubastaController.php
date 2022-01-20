@@ -81,6 +81,50 @@ class SubastaController extends Controller {
         }
     }
 
+    public function readPendientes(Request $request) {
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+                $subasta = Subasta::query()
+                    ->where('idStateSubasta', '=', 1)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                return response()->json(array('subasta' => $subasta, 'status' => 'success', 'message' => 'Subasta encontrados', 'code' => 200), 200);
+
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    } public function readAprobadas(Request $request) {
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+                $subasta = Subasta::query()
+                    ->where('idStateSubasta', '=', 2)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                return response()->json(array('subasta' => $subasta, 'status' => 'success', 'message' => 'Subasta encontrados', 'code' => 200), 200);
+
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    } public function readBloqueadas(Request $request) {
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+                $subasta = Subasta::query()
+                    ->where('idStateSubasta', '=', 3)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                return response()->json(array('subasta' => $subasta, 'status' => 'success', 'message' => 'Subasta encontrados', 'code' => 200), 200);
+
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
     public function readForUser(Request $request) {
         $token = $request->header('Authorization', null);
         $jwtAuth = new JwtAuth();
@@ -89,6 +133,27 @@ class SubastaController extends Controller {
             $decode = $jwtAuth->decode($token);
             if (!is_null($decode)) {
                 $subasta = Subasta::query()->where('idUser', '=', $decode->id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                return response()->json(array('subasta' => $subasta, 'status' => 'success', 'message' => 'Subasta encontrados', 'code' => 200), 200);
+            } else {
+                return response()->json(array('subasta' => null, 'status' => 'success', 'message' => 'Decode error', 'code' => 200), 200);
+            }
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
+    public function readForUserPendientes(Request $request) {
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            $decode = $jwtAuth->decode($token);
+            if (!is_null($decode)) {
+                $subasta = Subasta::query()
+                    ->where('idUser', '=', $decode->id)
+                    ->where('idStateSubasta', '=', 1)
                     ->orderBy('created_at', 'desc')
                     ->get();
                 return response()->json(array('subasta' => $subasta, 'status' => 'success', 'message' => 'Subasta encontrados', 'code' => 200), 200);

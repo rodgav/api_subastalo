@@ -22,9 +22,9 @@ class PageController extends Controller
                 $page->title = $title;
                 $page->html = $html;
                 $page->save();
-                return response()->json(array('page' => $page, 'status' => 'success', 'message' => 'Page creada', 'code' => 200), 200);
+                return response()->json(array('paginas' => $page, 'status' => 'success', 'message' => 'Page creada', 'code' => 200), 200);
             } else {
-                return response()->json(array('page' => null, 'status' => 'error', 'code' => 400, 'message' => 'Faltan datos'), 200);
+                return response()->json(array('paginas' => null, 'status' => 'error', 'code' => 400, 'message' => 'Faltan datos'), 200);
             }
         } else {
             return response()->json($checkToken, 200);
@@ -39,7 +39,7 @@ class PageController extends Controller
             $page = Page::query()
                 ->orderBy('created_at', 'desc')
                 ->get();
-            return response()->json(array('page' => $page, 'status' => 'success', 'message' => 'Paginas encontradas', 'code' => 200), 200);
+            return response()->json(array('paginas' => $page, 'status' => 'success', 'message' => 'Paginas encontradas', 'code' => 200), 200);
         } else {
             return response()->json($checkToken, 200);
         }

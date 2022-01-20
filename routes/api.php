@@ -51,7 +51,11 @@ Route::get('roles', [\App\Http\Controllers\RoleController::class, 'read']);
 Route::get('statesSubasta', [\App\Http\Controllers\StateSubastaController::class, 'read']);
 Route::post('subasta', [\App\Http\Controllers\SubastaController::class, 'create']);
 Route::get('subasta', [\App\Http\Controllers\SubastaController::class, 'read']);
+Route::get('subastaPendiente', [\App\Http\Controllers\SubastaController::class, 'readPendientes']);
+Route::get('subastaAprobada', [\App\Http\Controllers\SubastaController::class, 'readAprobadas']);
+Route::get('subastaBloqueada', [\App\Http\Controllers\SubastaController::class, 'readBloqueadas']);
 Route::get('misubasta', [\App\Http\Controllers\SubastaController::class, 'readForUser']);
+Route::get('misubastaPendiente', [\App\Http\Controllers\SubastaController::class, 'readForUserPendientes']);
 Route::get('miSubastaId', [\App\Http\Controllers\SubastaController::class, 'readForId']);
 Route::put('subasta/{id}', [\App\Http\Controllers\SubastaController::class, 'updateState']);
 Route::get('typePay', [\App\Http\Controllers\TypePayController::class, 'read']);
@@ -62,5 +66,7 @@ Route::get('user', [\App\Http\Controllers\UserController::class, 'read']);
 Route::get('userId', [\App\Http\Controllers\UserController::class, 'readId']);
 Route::post('vendedorSubasta', [\App\Http\Controllers\VendedorSubastaController::class, 'create']);
 Route::get('vendedorSubasta', [\App\Http\Controllers\VendedorSubastaController::class, 'read']);
+Route::get('favoritaSubasta', [\App\Http\Controllers\FavoritaSubastaController::class, 'read']);
+Route::get('historialSubasta', [\App\Http\Controllers\HistorialSubastaController::class, 'read']);
 
 

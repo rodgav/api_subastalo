@@ -20,11 +20,11 @@ CREATE TABLE provincias
 );
 
 alter table distritos
-add constraint distritos_idprovincia foreign key (id_provincia) references provincias (id) on update restrict on delete restrict,
-    add constraint distritos_iddepartamento foreign key (id_departamento) references departamentos (id) on update restrict on delete restrict;
+add constraint distritos_idprovincia foreign key (id_provincia) references provincias (id) on update cascade on delete cascade,
+    add constraint distritos_iddepartamento foreign key (id_departamento) references departamentos (id) on update cascade on delete cascade;
 
 alter table provincias
-add constraint provincias_iddepartamento foreign key (id_departmento) references departamentos (id) on update restrict on delete restrict;
+add constraint provincias_iddepartamento foreign key (id_departmento) references departamentos (id) on update cascade on delete cascade;
 
 INSERT INTO departamentos (id, nombre)
 VALUES ('01', 'Amazonas'),
@@ -2130,11 +2130,11 @@ VALUES ('150501', 'San Vicente de Cañete', '1505', '15'),
 
 create table category
 (
-    id         int primary key auto_increment      not null,
-    name       varchar(350)                        not null,
-    asset      varchar(350)                        not null,
-    created_at timestamp default current_timestamp not null,
-    updated_at timestamp default current_timestamp not null
+    id         int primary key auto_increment         not null,
+    name       varchar(350)                           not null,
+    asset      varchar(350) default 'other'           not null,
+    created_at timestamp    default current_timestamp not null,
+    updated_at timestamp    default current_timestamp not null
 );
 
 create table sub_category
@@ -2247,6 +2247,7 @@ create table comment
 (
     id         int primary key auto_increment       not null,
     idUser     int                                  not null,
+    idSubasta  int                                 not null,
     comment    varchar(350)                         not null,
     state      tinyint(1) default 0                 not null,
     created_at timestamp  default current_timestamp not null,
@@ -2261,7 +2262,7 @@ create table role
     updated_at timestamp default current_timestamp not null
 );
 
-insert into role (name) value ('client'),('admin');
+insert into role (id,name) value (1,'client'),(2,'admin');
 
 create table gender
 (
@@ -2271,7 +2272,7 @@ create table gender
     updated_at timestamp default current_timestamp not null
 );
 
-insert into gender (name) value ('hombre'),('mujer');
+insert into gender (id,name) value (1,'hombre'),(2,'mujer');
 
 create table users
 (
@@ -2286,7 +2287,7 @@ create table users
     phone      varchar(350)   default ''                not null,
     address    varchar(350)   default ''                not null,
     password   varchar(350)                             not null,
-    coins      decimal(20, 2) default 0.00              not null,
+    coins      decimal(10, 2) default 0.00              not null,
     created_at timestamp      default current_timestamp not null,
     updated_at timestamp      default current_timestamp not null
 );
@@ -2341,45 +2342,72 @@ create table pay
     updated_at  timestamp default current_timestamp not null
 );
 
+create table historial_subasta
+(
+    id         int primary key auto_increment      not null,
+    idUser     int                                 not null,
+    idSubasta  int                                 not null,
+    created_at timestamp default current_timestamp not null,
+    updated_at timestamp default current_timestamp not null
+);
+
+create table favorita_subasta
+(
+    id         int primary key auto_increment      not null,
+    idUser     int                                 not null,
+    idSubasta  int                                 not null,
+    created_at timestamp default current_timestamp not null,
+    updated_at timestamp default current_timestamp not null
+);
+
 # creando las relaciones
 
 alter table subasta
-add constraint idCategory_categoryS foreign key (idCategory) references category (id) on update restrict on delete restrict,
-    add constraint idSubCategory_subCategoryS foreign key (idSubCategory) references sub_category (id) on update restrict on delete restrict,
-    add constraint idTypeSubasta_TypeSubasta foreign key (idTypeSubasta) references type_subasta (id) on update restrict on delete restrict,
-    add constraint idHoraSubasta_HoraSubasta foreign key (idHoraSubasta) references hora_subasta (id) on update restrict on delete restrict,
-    add constraint idStateSubasta_StateSubasta foreign key (idStateSubasta) references state_subasta (id) on update restrict on delete restrict;
+add constraint idCategory_categoryS foreign key (idCategory) references category (id) on update cascade on delete cascade,
+    add constraint idSubCategory_subCategoryS foreign key (idSubCategory) references sub_category (id) on update cascade on delete cascade,
+    add constraint idTypeSubasta_TypeSubasta foreign key (idTypeSubasta) references type_subasta (id) on update cascade on delete cascade,
+    add constraint idHoraSubasta_HoraSubasta foreign key (idHoraSubasta) references hora_subasta (id) on update cascade on delete cascade,
+    add constraint idStateSubasta_StateSubasta foreign key (idStateSubasta) references state_subasta (id) on update cascade on delete cascade;
 
 alter table media_subasta
-add constraint idSubasta_subastaMS foreign key (idSubasta) references subasta (id) on update restrict on delete restrict;
+add constraint idSubasta_subastaMS foreign key (idSubasta) references subasta (id) on update cascade on delete cascade;
 
 alter table sub_category
-add constraint idCategory_category foreign key (idCategory) references category (id) on update restrict on delete restrict;
+add constraint idCategory_category foreign key (idCategory) references category (id) on update cascade on delete cascade;
 
 alter table location_subasta
-add constraint idSubasta_subastaLS foreign key (idSubasta) references subasta (id) on update restrict on delete restrict,
-    add constraint idDistrite_distriteLS foreign key (idDistrite) references distritos (id) on update restrict on delete restrict;
+add constraint idSubasta_subastaLS foreign key (idSubasta) references subasta (id) on update cascade on delete cascade,
+    add constraint idDistrite_distriteLS foreign key (idDistrite) references distritos (id) on update cascade on delete cascade;
 
 alter table vendedor_subasta
-add constraint idSubasta_subastaVS foreign key (idSubasta) references subasta (id) on update restrict on delete restrict;
+add constraint idSubasta_subastaVS foreign key (idSubasta) references subasta (id) on update cascade on delete cascade;
 
 alter table comment
-add constraint idSubasta_userC foreign key (idUser) references users (id) on update restrict on delete restrict;
+add constraint idUser_userC foreign key (idUser) references users (id) on update cascade on delete cascade,
+    add constraint idSubasta_subastaC foreign key (idSubasta) references subasta (id) on update cascade on delete cascade;
 
 alter table users
-add constraint idRole_roleU foreign key (idRole) references role (id) on update restrict on delete restrict,
-    add constraint idGender_genderU foreign key (idGender) references gender (id) on update restrict on delete restrict,
-    add constraint idDistrite_distriteU foreign key (idDistrite) references distritos (id) on update restrict on delete restrict;
+add constraint idRole_roleU foreign key (idRole) references role (id) on update cascade on delete cascade,
+    add constraint idGender_genderU foreign key (idGender) references gender (id) on update cascade on delete cascade,
+    add constraint idDistrite_distriteU foreign key (idDistrite) references distritos (id) on update cascade on delete cascade;
 
 alter table token_session
-add constraint idUser_userTS foreign key (idUser) references users (id) on update restrict on delete restrict;
+add constraint idUser_userTS foreign key (idUser) references users (id) on update cascade on delete cascade;
 
 alter table message
-add constraint idSender_messageU foreign key (idSender) references users (id) on update restrict on delete restrict,
-    add constraint idReceiver foreign key (idReceiver) references users (id) on update restrict on delete restrict;
+add constraint idSender_messageU foreign key (idSender) references users (id) on update cascade on delete cascade,
+    add constraint idReceiver foreign key (idReceiver) references users (id) on update cascade on delete cascade;
 
 alter table pay
-add constraint idTypePay_typePayP foreign key (idTypePay) references type_pay (id) on update restrict on delete restrict;
+add constraint idTypePay_typePayP foreign key (idTypePay) references type_pay (id) on update cascade on delete cascade;
+
+alter table historial_subasta
+add constraint idUser_userHS foreign key (idUser) references users (id) on update cascade on delete cascade,
+    add constraint idSubasta_subastaHS foreign key (idSubasta) references subasta (id) on update cascade on delete cascade;
+
+alter table favorita_subasta
+add constraint idUser_userFS foreign key (idUser) references users (id) on update cascade on delete cascade,
+    add constraint idSubasta_subastaFS foreign key (idSubasta) references subasta (id) on update cascade on delete cascade;
 
 # creando unique keys
 
@@ -2389,31 +2417,7 @@ add unique subastaUniq (idHoraSubasta, date);
 # insertando valores
 
 insert into hora_subasta (time)
-values ('7:00:00'),
-       ('7:05:00'),
-       ('7:10:00'),
-       ('7:15:00'),
-       ('7:20:00'),
-       ('7:25:00'),
-       ('7:30:00'),
-       ('7:35:00'),
-       ('7:40:00'),
-       ('7:45:00'),
-       ('7:50:00'),
-       ('7:55:00'),
-       ('8:00:00'),
-       ('8:05:00'),
-       ('8:10:00'),
-       ('8:15:00'),
-       ('8:20:00'),
-       ('8:25:00'),
-       ('8:30:00'),
-       ('8:35:00'),
-       ('8:40:00'),
-       ('8:45:00'),
-       ('8:50:00'),
-       ('8:55:00'),
-       ('9:00:00'),
+values ('9:00:00'),
        ('9:05:00'),
        ('9:10:00'),
        ('9:15:00'),
@@ -2582,15 +2586,15 @@ values ('7:00:00'),
        ('23:50:00'),
        ('23:55:00');
 
-insert into state_subasta (name)
-values ('pendiente'),
-    ('aprovada'),
-    ('bloqueada');
+insert into state_subasta (id,name)
+values (1,'pendiente'),
+    (2,'aprobada'),
+    (3,'bloqueada');
 
-insert into type_subasta (name)
-values ('negociable'),
-    ('subasta'),
-    ('venta');
+insert into type_subasta (id,name)
+values (1,'negociable'),
+    (2,'subasta'),
+    (3,'venta');
 
 insert into category (name, asset)
 values ('Vehículos', 'vehiculos'),
@@ -2606,10 +2610,10 @@ values ('Vehículos', 'vehiculos'),
 
 insert into sub_category(id, idCategory, name) value (1, 1, 'ninguna');
 
-insert into type_pay (name)
-values ('YAPE'),
-    ('PLIN'),
-    ('Transferencia');
+insert into type_pay (id,name)
+values (1,'YAPE'),
+    (2,'PLIN'),
+    (3,'Transferencia');
 
 ######################
 
