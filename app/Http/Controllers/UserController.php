@@ -47,16 +47,18 @@ class UserController extends Controller {
         $name = (!is_null($json) && isset($params->name)) ? $params->name : null;
         $email = (!is_null($json) && isset($params->email)) ? $params->email : null;
         $password = (!is_null($json) && isset($params->password)) ? $params->password : null;
+        $idRole = (!is_null($json) && isset($params->idRole)) ? $params->idRole : null;
         //$token = $request->header('Authorization', null);
         $jwtAuth = new JwtAuth();
         //$checkToken = $jwtAuth->checkToken($token);
         //if (is_null($checkToken)) {
-        if (!is_null($dni) && !is_null($name) && !is_null($email) && !is_null($password)) {
+        if (!is_null($dni) && !is_null($name) && !is_null($email) && !is_null($password) && !is_null($idRole)) {
             $user = new User();
             $user->dni = $dni;
             $user->name = $name;
             $user->email = $email;
             $user->password = $password;
+            $user->idRole = $idRole;
             $user->save();
             $singup = $jwtAuth->singup($email, $password);
             return response()->json($singup, 200);
@@ -120,6 +122,21 @@ class UserController extends Controller {
                 ->orderBy('created_at', 'desc')
                 ->get();
             return response()->json(array('users' => $user, 'status' => 'success', 'message' => 'Usuarios encontrados', 'code' => 200), 200);
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
+    public function readAdmin(Request $request) {
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            $user = User::query()
+                ->where('idRole','=',2)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            return response()->json(array('users' => $user, 'status' => 'success', 'message' => 'Administradores encontrados', 'code' => 200), 200);
         } else {
             return response()->json($checkToken, 200);
         }

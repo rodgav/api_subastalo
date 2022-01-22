@@ -46,6 +46,7 @@ Route::post('page', [\App\Http\Controllers\PageController::class, 'create']);
 Route::get('page', [\App\Http\Controllers\PageController::class, 'read']);
 Route::post('pay', [\App\Http\Controllers\PayController::class, 'create']);
 Route::get('pay', [\App\Http\Controllers\PayController::class, 'read']);
+Route::get('miPay', [\App\Http\Controllers\PayController::class, 'readForUser']);
 Route::get('provincias', [\App\Http\Controllers\ProvinciasController::class, 'read']);
 Route::get('roles', [\App\Http\Controllers\RoleController::class, 'read']);
 Route::get('statesSubasta', [\App\Http\Controllers\StateSubastaController::class, 'read']);
@@ -55,6 +56,7 @@ Route::get('subastaPendiente', [\App\Http\Controllers\SubastaController::class, 
 Route::get('subastaAprobada', [\App\Http\Controllers\SubastaController::class, 'readAprobadas']);
 Route::get('subastaBloqueada', [\App\Http\Controllers\SubastaController::class, 'readBloqueadas']);
 Route::get('misubasta', [\App\Http\Controllers\SubastaController::class, 'readForUser']);
+Route::get('subastaUser', [\App\Http\Controllers\SubastaController::class, 'readForUserId']);
 Route::get('misubastaPendiente', [\App\Http\Controllers\SubastaController::class, 'readForUserPendientes']);
 Route::get('miSubastaId', [\App\Http\Controllers\SubastaController::class, 'readForId']);
 Route::put('subasta/{id}', [\App\Http\Controllers\SubastaController::class, 'updateState']);
@@ -63,6 +65,7 @@ Route::get('typeSubasta', [\App\Http\Controllers\TypeSubastaController::class, '
 Route::post('user', [\App\Http\Controllers\UserController::class, 'create']);
 Route::post('userFull', [\App\Http\Controllers\UserController::class, 'createFull']);
 Route::get('user', [\App\Http\Controllers\UserController::class, 'read']);
+Route::get('userAdmin', [\App\Http\Controllers\UserController::class, 'readAdmin']);
 Route::get('userId', [\App\Http\Controllers\UserController::class, 'readId']);
 Route::post('vendedorSubasta', [\App\Http\Controllers\VendedorSubastaController::class, 'create']);
 Route::get('vendedorSubasta', [\App\Http\Controllers\VendedorSubastaController::class, 'read']);

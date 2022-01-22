@@ -41,10 +41,17 @@ class MessageController extends Controller {
         $jwtAuth = new JwtAuth();
         $checkToken = $jwtAuth->checkToken($token);
         if (is_null($checkToken)) {
-            $messages = Message::query()
-                ->orderBy('created_at', 'desc')
-                ->get();
-            return response()->json(array('messages' => $messages, 'status' => 'success', 'message' => 'Mensajes encontrados', 'code' => 200), 200);
+            $decode = $jwtAuth->decode($token);
+            if (!is_null($decode)) {
+                $messages = Message::with(['sender', 'receiver'])
+                    ->where('idSender', '=', $decode->id)
+                    ->orWhere('idReceiver', '=', $decode->id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                return response()->json(array('messages' => $messages, 'status' => 'success', 'message' => 'Mensajes encontrados', 'code' => 200), 200);
+            } else {
+                return response()->json(array('subasta' => null, 'status' => 'success', 'message' => 'Decode error', 'code' => 200), 200);
+            }
         } else {
             return response()->json($checkToken, 200);
         }

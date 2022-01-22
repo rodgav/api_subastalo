@@ -10,6 +10,10 @@ class Subasta extends Model {
 
     protected $table = 'subasta';
 
+    public function user() {
+        return $this->belongsTo('App\Models\User', 'idUser');
+    }
+
     public function category() {
         $this->belongsTo('App\Models\Category', 'idCategory');
     }
