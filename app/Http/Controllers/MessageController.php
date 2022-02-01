@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JwtAuth;
 use App\Models\Message;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller {
@@ -50,7 +51,7 @@ class MessageController extends Controller {
                     ->get();
                 return response()->json(array('messages' => $messages, 'status' => 'success', 'message' => 'Mensajes encontrados', 'code' => 200), 200);
             } else {
-                return response()->json(array('subasta' => null, 'status' => 'success', 'message' => 'Decode error', 'code' => 200), 200);
+                return response()->json(array('messages' => null, 'status' => 'success', 'message' => 'Decode error', 'code' => 200), 200);
             }
         } else {
             return response()->json($checkToken, 200);
@@ -67,6 +68,27 @@ class MessageController extends Controller {
                 return response()->json(array('messages' => $messages, 'status' => 'success', 'message' => 'Mensaje actualizado', 'code' => 200), 200);
             } else {
                 return response()->json(array('messages' => null, 'status' => 'error', 'code' => 400, 'message' => 'No se pudo actualizar el estado del mensaje'), 200);
+            }
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
+    public function delete(Request $request, $id) {
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            $message = Message::query()->find($id);
+            if (is_object($message)) {
+                try {
+                    $message->delete();
+                    return response()->json(array('messages' => $message, 'status' => 'success', 'message' => 'Campaña eliminada', 'code' => 200), 200);
+                } catch (QueryException $e) {
+                    return response()->json(array('messages' => null, 'status' => 'success', 'message' => 'Campaña no eliminada.', 'code' => 400), 200);
+                }
+            } else {
+                return response()->json(array('messages' => null, 'status' => 'success', 'message' => 'Campaña no eliminada', 'code' => 400), 200);
             }
         } else {
             return response()->json($checkToken, 200);

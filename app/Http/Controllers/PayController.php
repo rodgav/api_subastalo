@@ -67,7 +67,30 @@ class PayController extends Controller {
                     ->get();
                 return response()->json(array('pago' => $pay, 'status' => 'success', 'message' => 'Pagos encontrados', 'code' => 200), 200);
             } else {
-                return response()->json(array('subasta' => null, 'status' => 'success', 'message' => 'Decode error', 'code' => 200), 200);
+                return response()->json(array('pago' => null, 'status' => 'success', 'message' => 'Decode error', 'code' => 200), 200);
+            }
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
+    public function update(Request $request, $id) {
+        $json = $request->input('json', null);
+        $params = json_decode($json);
+        $state = (!is_null($json) && isset($params->state)) ? $params->state : null;
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            if (!is_null($state)) {
+                $page = Pay::query()->where('id', $id)->update(['state' => $state]);
+                if ($page) {
+                    return response()->json(array('pago' => $page, 'status' => 'success', 'message' => 'Pago actualizado', 'code' => 200), 200);
+                } else {
+                    return response()->json(array('pago' => null, 'status' => 'error', 'code' => 400, 'message' => 'No se pudo actualizar el pago'), 200);
+                }
+            } else {
+                return response()->json(array('pago' => null, 'status' => 'error', 'code' => 400, 'message' => 'Faltan datos'), 200);
             }
         } else {
             return response()->json($checkToken, 200);

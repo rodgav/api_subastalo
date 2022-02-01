@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JwtAuth;
 use App\Models\TokenSession;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class UserController extends Controller {
@@ -133,7 +134,7 @@ class UserController extends Controller {
         $checkToken = $jwtAuth->checkToken($token);
         if (is_null($checkToken)) {
             $user = User::query()
-                ->where('idRole','=',2)
+                ->where('idRole', '=', 2)
                 ->orderBy('created_at', 'desc')
                 ->get();
             return response()->json(array('users' => $user, 'status' => 'success', 'message' => 'Administradores encontrados', 'code' => 200), 200);
@@ -153,6 +154,49 @@ class UserController extends Controller {
                 ->orderBy('created_at', 'desc')
                 ->get();
             return response()->json(array('user' => $user, 'status' => 'success', 'message' => 'Usuario encontrado', 'code' => 200), 200);
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
+    public function update(Request $request, $id) {
+        $json = $request->input('json', null);
+        $params = json_decode($json);
+        $dni = (!is_null($json) && isset($params->dni)) ? $params->dni : null;
+        $name = (!is_null($json) && isset($params->name)) ? $params->name : null;
+        $email = (!is_null($json) && isset($params->email)) ? $params->email : null;
+        $password = (!is_null($json) && isset($params->password)) ? $params->password : null;
+        $idRole = (!is_null($json) && isset($params->idRole)) ? $params->idRole : null;
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            if (!is_null($dni) && !is_null($name) && !is_null($email) && !is_null($password) && !is_null($idRole)) {
+                $user = User::query()->where('id', $id)->update(['dni' => $dni, 'name' => $name, 'email' => $email, 'password' => $password]);
+                if ($user) {
+                    return response()->json(array('user' => $user, 'status' => 'success', 'message' => 'Usuario actualizado', 'code' => 200), 200);
+                } else {
+                    return response()->json(array('user' => null, 'status' => 'error', 'code' => 400, 'message' => 'No se pudo actualizar el usuario'), 200);
+                }
+            } else {
+                return response()->json(array('user' => null, 'status' => 'error', 'code' => 400, 'message' => 'Faltan datos'), 200);
+            }
+        } else {
+            return response()->json($checkToken, 200);
+        }
+    }
+
+    public function delete(Request $request, $id) {
+        $token = $request->header('Authorization', null);
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+        if (is_null($checkToken)) {
+            $user = User::query()->where('id', $id)->update(['active' => 0]);
+            if ($user) {
+                return response()->json(array('user' => $user, 'status' => 'success', 'message' => 'Usuario actualizado', 'code' => 200), 200);
+            } else {
+                return response()->json(array('user' => null, 'status' => 'error', 'code' => 400, 'message' => 'No se pudo actualizar el usuario'), 200);
+            }
         } else {
             return response()->json($checkToken, 200);
         }

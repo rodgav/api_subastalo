@@ -60,7 +60,6 @@ class SubastaController extends Controller {
                 }
             } else {
                 return response()->json(array('subasta' => null, 'status' => 'error', 'code' => 400, 'message' => 'Decode error '), 200);
-
             }
         } else {
             return response()->json($checkToken, 200);
