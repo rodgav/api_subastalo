@@ -66,6 +66,7 @@ Route::get('subasta', [\App\Http\Controllers\SubastaController::class, 'read']);
 Route::get('subastaPendiente', [\App\Http\Controllers\SubastaController::class, 'readPendientes']);
 Route::get('subastaAprobada', [\App\Http\Controllers\SubastaController::class, 'readAprobadas']);
 Route::get('subastaBloqueada', [\App\Http\Controllers\SubastaController::class, 'readBloqueadas']);
+Route::get('subastaLast', [\App\Http\Controllers\SubastaController::class, 'readLast']);
 Route::get('misubasta', [\App\Http\Controllers\SubastaController::class, 'readForUser']);
 Route::get('subastaUser', [\App\Http\Controllers\SubastaController::class, 'readForUserId']);
 Route::get('misubastaPendiente', [\App\Http\Controllers\SubastaController::class, 'readForUserPendientes']);

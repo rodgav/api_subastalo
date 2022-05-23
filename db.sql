@@ -2589,7 +2589,8 @@ values ('9:00:00'),
 insert into state_subasta (id,name)
 values (1,'pendiente'),
     (2,'aprobada'),
-    (3,'bloqueada');
+    (3,'bloqueada'),
+    (4,'finalizada');
 
 insert into type_subasta (id,name)
 values (1,'negociable'),
